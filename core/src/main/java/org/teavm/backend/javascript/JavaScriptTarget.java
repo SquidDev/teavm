@@ -482,11 +482,11 @@ public class JavaScriptTarget implements TeaVMTarget, TeaVMJavaScriptHost {
             }
 
             for (var entry : controller.getEntryPoints().entrySet()) {
-                sourceWriter.append("$rt_exports.").append(entry.getKey()).ws().append("=").ws();
+                sourceWriter.append("export var ").append(entry.getKey()).ws().append("=").ws();
                 var ref = entry.getValue().getMethod();
                 sourceWriter.append("$rt_mainStarter(").appendMethodBody(ref);
                 sourceWriter.append(");").newLine();
-                sourceWriter.append("$rt_exports.").append(entry.getKey()).append(".").append("javaException")
+                sourceWriter.append(entry.getKey()).append(".").append("javaException")
                         .ws().append("=").ws().append("$rt_javaException;").newLine();
             }
 
@@ -505,12 +505,7 @@ public class JavaScriptTarget implements TeaVMTarget, TeaVMJavaScriptHost {
 
     private void printWrapperStart(SourceWriter writer) throws IOException {
         writer.append("\"use strict\";").newLine();
-        printUmdStart(writer);
-        writer.append("function($rt_globals,").ws().append("$rt_exports");
-        for (var moduleName : importedModules.values()) {
-            writer.append(",").ws().appendFunction(moduleName);
-        }
-        writer.append(")").appendBlockStart();
+        writer.append("var $rt_globals").ws().append("=").ws().append("this;").newLine();
     }
 
     private String importModule(String name) {
@@ -556,7 +551,6 @@ public class JavaScriptTarget implements TeaVMTarget, TeaVMJavaScriptHost {
     }
 
     private void printWrapperEnd(SourceWriter writer) throws IOException {
-        writer.outdent().append("}));").newLine();
     }
 
     private void printStats(Renderer renderer, int totalSize) {

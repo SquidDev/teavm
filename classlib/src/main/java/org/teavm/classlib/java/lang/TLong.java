@@ -215,6 +215,18 @@ public class TLong extends TNumber implements TComparable<TLong> {
         return toUnsignedLogRadixString(i, 1);
     }
 
+    public static String toUnsignedString(long value) {
+        TStringBuilder builder = new TStringBuilder();
+        if (value > 0) {
+            builder.append(value);
+        } else {
+            long signedQuotient = (value >>> 2) / 5;
+            builder.append(signedQuotient);
+            builder.append(value - signedQuotient * 10);
+        }
+        return builder.toString();
+    }
+
     public static String toString(long value) {
         return new TStringBuilder().append(value).toString();
     }

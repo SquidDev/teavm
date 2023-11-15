@@ -545,4 +545,12 @@ public final class TMath extends TObject {
         }
         return Math.min(max, Math.max(value, min));
     }
+
+    public static double scalb(double d, int scaleFactor) {
+        var steps = Math.min(3, Math.ceil(Math.abs(scaleFactor) / 1023.0));
+        for (var i = 0; i < steps; i++) {
+            d *= Math.pow(2, Math.floor((scaleFactor + i) / steps));
+        }
+        return d;
+    }
 }

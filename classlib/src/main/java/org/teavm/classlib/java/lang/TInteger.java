@@ -396,4 +396,8 @@ public class TInteger extends TNumber implements TComparable<TInteger> {
     @InjectedBy(IntegerNativeGenerator.class)
     @NoSideEffects
     public static native int compareUnsigned(int a, int b);
+
+    public static long toUnsignedLong(int value) {
+        return value & 0xFFFFFFFFL;
+    }
 }
